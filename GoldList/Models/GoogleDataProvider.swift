@@ -45,7 +45,7 @@ class GoogleDataProvider {
     types:[String],
     completion: @escaping PlacesCompletion
   ) -> Void {
-    var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(coordinate)&radius=\(radius)&rankby=prominence&sensor=true&key=AIzaSyDVInt6z-SiteVrK_JROYCm2ygTNjooUxA"
+    var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(coordinate)&radius=\(radius)&rankby=prominence&sensor=true&key="
     let typesString = types.count > 0 ? types.joined(separator: "|") : "food"
     urlString += "&types=\(typesString)"
     urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? urlString
