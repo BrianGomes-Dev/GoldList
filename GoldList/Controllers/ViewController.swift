@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var shopsView: UIView!
     @IBOutlet weak var shopsLbl: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var searchTableView: UITableView!
     
     
     
@@ -23,6 +24,7 @@ class ViewController: UIViewController {
     var ActivitiesImg = [ #imageLiteral(resourceName: "pint-of-beer"),#imageLiteral(resourceName: "fast-food"),#imageLiteral(resourceName: "cupcake")]
     var categoryDataArr : [categoryData] = []
     var selectedCategory = ""
+    var searchedData:[String] = []
     
     var categoryStatus = 1
     // 1 = activities
@@ -37,14 +39,20 @@ class ViewController: UIViewController {
         setGestures()
         ActivitiesClicked()
         
+        
+        searchTableView.dataSource = self
+        searchTableView.delegate = self
+        searchTableView.register(UINib(nibName: "SearchCell", bundle: nil), forCellReuseIdentifier: "searchCell")
+        searchTableView.alpha = 0
+        
     }
    
     func insertActivitiesData(){
         categoryDataArr.removeAll()
         categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "ferris-wheel"), catName: "Theme Park", catID: "amusement_park"))
-        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "fish"), catName: "Aquarium", catID: "aquarium"))
+        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "aquarium"), catName: "Aquarium", catID: "aquarium"))
         categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "macaw"), catName: "Zoo", catID: "zoo"))
-        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "book"), catName: "Library", catID: "library"))
+        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "library"), catName: "Library", catID: "library"))
         
     }
     func insertFoodsData(){
@@ -60,10 +68,10 @@ class ViewController: UIViewController {
         categoryDataArr.removeAll()
         
         categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "mortar"), catName: "Spa", catID: "spa"))
-        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "cash-register"), catName: "Electronics", catID: " electronics_store"))
+        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "online-shop"), catName: "Electronics", catID: " electronics_store"))
         categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "store"), catName: "Supermarket", catID: "supermarket"))
         categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "repair-shop"), catName: "Hardware", catID: "hardware_store"))
-        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "travel-agency"), catName: "Travel", catID: "travel_agency"))
+        categoryDataArr.append(categoryData(catImg: #imageLiteral(resourceName: "bag"), catName: "Travel", catID: "travel_agency"))
         
     }
     
@@ -83,15 +91,19 @@ class ViewController: UIViewController {
     
     @objc func ActivitiesClicked()
     {
+        categoryStatus = 1
         insertActivitiesData()
         activitiesLbl.textColor = #colorLiteral(red: 0.7191421986, green: 0.5696715117, blue: 0.3770875037, alpha: 1)
         shopsLbl.textColor = UIColor.white
         foodLbl.textColor = UIColor.white
+        
         collectionView.reloadData()
+    
     }
     
     @objc func foodClicked()
     {
+        categoryStatus = 2
         insertFoodsData()
         foodLbl.textColor = #colorLiteral(red: 0.7191421986, green: 0.5696715117, blue: 0.3770875037, alpha: 1)
         shopsLbl.textColor = UIColor.white
@@ -101,6 +113,7 @@ class ViewController: UIViewController {
     
     @objc func shopClicked()
     {
+        categoryStatus = 3
         insertShopsData()
         shopsLbl.textColor = #colorLiteral(red: 0.7191421986, green: 0.5696715117, blue: 0.3770875037, alpha: 1)
         activitiesLbl.textColor = UIColor.white
@@ -125,6 +138,7 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
     
         
         cell.setData(Image: categoryDataArr[indexPath.row].catImg, Name: categoryDataArr[indexPath.row].catName)
+        
         
 
         return cell
@@ -160,7 +174,8 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
         let storyBoard = UIStoryboard(name: "Main", bundle:nil)
                 let maps = storyBoard.instantiateViewController(withIdentifier: "mapsVC") as! MapsVC
         
-        maps.selectedCategory = categoryDataArr[indexPath.row].catID
+       // maps.selectedCategory = categoryDataArr[indexPath.row].catID
+        maps.selectedCategory = categoryStatus
                
                 self.present(maps, animated: true, completion: nil)
         
@@ -195,11 +210,82 @@ extension ViewController:UISearchBarDelegate{
                 searchBar.placeholder = "Type a place name"
                 
             }
-            else {
-                print("go to maps")
+            else if searchBar.text == "Library" {
+                searchedData.append("Library")
+                let storyBoard = UIStoryboard(name: "Main", bundle:nil)
+                        let maps = storyBoard.instantiateViewController(withIdentifier: "mapsVC") as! MapsVC
+                
+               // maps.selectedCategory = categoryDataArr[indexPath.row].catID
+                maps.selectedCategory = categoryStatus
+                
+                       
+                        self.present(maps, animated: true, completion: nil)
+            
+            } else if searchBar.text == "Bakery" {
+                searchedData.append("Bakery")
+                let storyBoard = UIStoryboard(name: "Main", bundle:nil)
+                        let maps = storyBoard.instantiateViewController(withIdentifier: "mapsVC") as! MapsVC
+                
+               // maps.selectedCategory = categoryDataArr[indexPath.row].catID
+                maps.selectedCategory = categoryStatus
+                
+                       
+                        self.present(maps, animated: true, completion: nil)
             
             }
+            else if searchBar.text == "Supermarket" {
+                searchedData.append("Supermarket")
+                let storyBoard = UIStoryboard(name: "Main", bundle:nil)
+                        let maps = storyBoard.instantiateViewController(withIdentifier: "mapsVC") as! MapsVC
+                
+               // maps.selectedCategory = categoryDataArr[indexPath.row].catID
+                maps.selectedCategory = categoryStatus
+                
+                       
+                        self.present(maps, animated: true, completion: nil)
+            }
+}
     
+ 
+    
+    
+    
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        searchTableView.reloadData()
+        searchTableView.alpha = 0
+        print("Search Ended")
+        return true
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchTableView.reloadData()
+        if searchedData.count == 0{
+            searchTableView.alpha = 0
+        }else{
+            searchTableView.alpha = 1
+        }
+      
+        print("Search Started")
+        return true
+    }
     
 }
+
+extension ViewController:UITableViewDelegate,UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchedData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath) as! SearchCell
+        cell.selectionStyle = .none
+        cell.searchText.text = searchedData[indexPath.row]
+        return cell
+    }
+    
+    
+    
+    
+    
+    
 }
